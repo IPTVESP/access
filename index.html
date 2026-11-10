@@ -20,10 +20,7 @@
             min-height: 100vh; 
         }
         
-        .main-container {
-            width: 100%;
-            max-width: 600px; 
-        }
+        .main-container { width: 100%; max-width: 600px; }
 
         /* Títulos superiores */
         .page-header { margin-bottom: 25px; display: none; }
@@ -31,25 +28,10 @@
         .page-subtitle { color: #a0a0a0; font-size: 1rem; margin: 0; }
 
         /* Tarjeta principal */
-        .card { 
-            background-color: #1e222b; 
-            border-radius: 12px; 
-            padding: 25px; 
-            width: 100%; 
-            border: 1px solid #2d323c; 
-            box-sizing: border-box; 
-        }
+        .card { background-color: #1e222b; border-radius: 12px; padding: 25px; width: 100%; border: 1px solid #2d323c; box-sizing: border-box; }
         
         /* Cabecera del plan */
-        .header-plan { 
-            display: flex; 
-            justify-content: space-between; 
-            margin-bottom: 25px; 
-            background-color: #171a21;
-            padding: 18px 20px; 
-            border-radius: 8px;
-            border: 1px solid #2d323c;
-        }
+        .header-plan { display: flex; justify-content: space-between; margin-bottom: 25px; background-color: #171a21; padding: 18px 20px; border-radius: 8px; border: 1px solid #2d323c; }
         .header-plan .label-small { font-size: 0.8rem; color: #8892a0; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; display: block; }
         .plan-name { font-weight: bold; font-size: 1.15rem; color: #ffffff; display: block; margin-top: 4px; }
         .expira { color: #f5b041; font-weight: bold; font-size: 1.15rem; display: block; margin-top: 4px; }
@@ -79,7 +61,7 @@
         .alt-url:hover { background-color: rgba(74, 144, 226, 0.3); }
         .alt-copy-icon { color: #f5b041; cursor: pointer; margin-left: 10px; opacity: 0.7; transition: opacity 0.2s; display: flex; align-items: center; }
         .alt-copy-icon:hover { opacity: 1; }
-        .alt-vpn { color: #8892a0; font-size: 0.9rem; margin-left: 10px; }
+        .alt-tag { color: #8892a0; font-size: 0.85rem; margin-left: 10px; font-style: italic; }
 
         /* Footer WhatsApp */
         .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #2d323c; display: flex; align-items: center; justify-content: flex-start; gap: 15px; font-size: 1rem; color: #8892a0; }
@@ -171,14 +153,6 @@
             }
         }
 
-        // --- UTILIDADES DE FECHA ---
-
-        /**
-         * Convierte el string de expiración a un objeto Date LOCAL.
-         * Acepta:
-         *   "YYYY-MM-DD"           -> se interpreta como 23:59:59 hora local
-         *   "YYYY-MM-DD HH:MM:SS"  -> se interpreta tal cual, hora local
-         */
         function parseExpira(expiraStr) {
             if (!expiraStr) return null;
             const s = String(expiraStr).trim();
@@ -188,12 +162,6 @@
             return new Date(s + 'T23:59:59');
         }
 
-        /**
-         * Formatea el string de expiración para mostrarlo de forma legible.
-         *   "YYYY-MM-DD 23:59:59" -> "YYYY-MM-DD"
-         *   "YYYY-MM-DD 00:00:00" -> "YYYY-MM-DD"
-         *   "YYYY-MM-DD HH:MM:SS" -> "YYYY-MM-DD HH:MM" (planes de 1h/1d)
-         */
         function formatearFecha(expiraStr) {
             if (!expiraStr) return expiraStr;
             const s = String(expiraStr);
@@ -228,7 +196,6 @@
             }
         }
 
-        // --- PANTALLA 1: ENLACE INVÁLIDO ---
         function renderInvalido(mensajeDebug = "") {
             document.getElementById('header-principal').style.display = 'none';
             const app = document.getElementById('app');
@@ -253,7 +220,6 @@
             `;
         }
 
-        // --- PANTALLA 2: ENLACE CADUCADO ---
         function renderExpirado(datos) {
             document.getElementById('header-principal').style.display = 'none';
             const app = document.getElementById('app');
@@ -285,7 +251,6 @@
             `;
         }
 
-        // --- PANTALLA 3: DATOS VÁLIDOS ---
         function renderPanel(datos) {
             document.getElementById('header-principal').style.display = 'block';
             const app = document.getElementById('app');
@@ -293,12 +258,29 @@
             app.style.border = '1px solid #2d323c';
             
             let htmlAlternativas = '';
+            
+            // 🔥 LÓGICA DE URLS SEPARADAS (NORMALES Y VPN) 🔥
+            let urlsHtml = '';
+            
             if (datos.servidor.alternativas && datos.servidor.alternativas.length > 0) {
-                let urlsHtml = datos.servidor.alternativas.map((url, index) => {
-                    let extraText = (index === 1) ? ' <span class="alt-vpn"> - si usas VPN</span>' : '';
-                    return `<div class="alt-row"><span class="alt-url" onclick="copiarTextoDirecto('${url}', this)">${url}</span><span class="alt-copy-icon" onclick="copiarTextoDirecto('${url}', this)">${ICONO_COPIAR}</span>${extraText}</div>`;
+                urlsHtml += datos.servidor.alternativas.map((url) => {
+                    return `<div class="alt-row"><span class="alt-url" onclick="copiarTextoDirecto('${url}', this)">${url}</span><span class="alt-copy-icon" onclick="copiarTextoDirecto('${url}', this)">${ICONO_COPIAR}</span></div>`;
                 }).join('');
-                htmlAlternativas = `<div class="alt-box"><p class="alt-text">Tu operador bloquea la dirección habitual: esta sí funciona. Si viajas o usas VPN, usa una de las alternativas.</p><span class="alt-label">URLS ALTERNATIVAS</span>${urlsHtml}</div>`;
+            }
+            
+            if (datos.servidor.vpn_alternativas && datos.servidor.vpn_alternativas.length > 0) {
+                urlsHtml += datos.servidor.vpn_alternativas.map((url) => {
+                    return `<div class="alt-row"><span class="alt-url" onclick="copiarTextoDirecto('${url}', this)">${url}</span><span class="alt-copy-icon" onclick="copiarTextoDirecto('${url}', this)">${ICONO_COPIAR}</span><span class="alt-tag">- Usar con VPN</span></div>`;
+                }).join('');
+            }
+
+            if (urlsHtml !== '') {
+                htmlAlternativas = `
+                <div class="alt-box">
+                    <p class="alt-text">Tu operador bloquea la dirección habitual: estas URLs sí funcionan.</p>
+                    <span class="alt-label">URLS ALTERNATIVAS</span>
+                    ${urlsHtml}
+                </div>`;
             }
 
             const fechaLegible = formatearFecha(datos.expira);
