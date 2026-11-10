@@ -5,22 +5,170 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Accesos</title>
     <style>
-        body { background-color: #0f1115; color: #e0e0e0; font-family: sans-serif; padding: 20px; margin: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
-        .card { background-color: #1e222b; border-radius: 12px; padding: 20px; width: 100%; max-width: 600px; border: 1px solid #2d323c; box-sizing: border-box; margin-top: 20px; }
-        .header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #2d323c; padding-bottom: 15px; }
-        .plan-name { font-weight: bold; font-size: 1.2em; }
-        .expira { color: #f5b041; font-weight: bold; }
-        .section-title { color: #f5b041; font-size: 1.1em; margin-top: 25px; border-left: 3px solid #f5b041; padding-left: 10px; font-weight: bold;}
-        .subtitle { font-size: 0.8em; color: #888; margin-bottom: 10px; }
-        .field { margin-top: 10px; }
-        .field label { display: block; font-size: 0.8em; color: #888; text-transform: uppercase; margin-bottom: 5px; }
-        .field input { width: 100%; background-color: #14181f; border: 1px solid #2d323c; color: #fff; padding: 12px; border-radius: 6px; font-family: monospace; box-sizing: border-box; cursor: pointer; transition: border 0.2s;}
-        .field input:hover { border-color: #f5b041; }
-        .alt-box { background-color: #1e222b; border: 1px solid #2d323c; border-radius: 8px; padding: 15px; margin-top: 15px; }
-        .alt-text { font-size: 0.85em; color: #ccc; margin-top: 0; margin-bottom: 10px; line-height: 1.4;}
-        .alt-label { color: #f5b041; font-size: 0.8em; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px;}
-        .alt-url { display: block; color: #4a90e2; font-family: monospace; margin-bottom: 5px; cursor: pointer; background-color: rgba(74, 144, 226, 0.1); padding: 4px 6px; border-radius: 4px; width: fit-content;}
-        .alt-url:hover { background-color: rgba(74, 144, 226, 0.2); }
+        /* Estilos generales basados en tu imagen */
+        body { 
+            background-color: #0f1115; 
+            color: #e0e0e0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            padding: 20px; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh; 
+        }
+        
+        .main-container {
+            width: 100%;
+            max-width: 650px;
+            margin-top: 20px;
+        }
+
+        /* Títulos superiores */
+        .page-header {
+            margin-bottom: 25px;
+        }
+        .page-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 0 0 5px 0;
+        }
+        .page-subtitle {
+            color: #cccccc;
+            font-size: 1em;
+            margin: 0;
+        }
+
+        /* Tarjeta principal */
+        .card { 
+            background-color: #1e222b; 
+            border-radius: 12px; 
+            padding: 25px; 
+            width: 100%; 
+            border: 1px solid #2d323c; 
+            box-sizing: border-box; 
+        }
+        
+        /* Cabecera del plan */
+        .header-plan { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 20px; 
+            background-color: #14181f;
+            padding: 15px 20px;
+            border-radius: 8px;
+        }
+        .header-plan span { font-size: 0.8em; color: #888; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;}
+        .plan-name { font-weight: bold; font-size: 1.1em; color: #ffffff; display: block; margin-top: 5px;}
+        .expira { color: #f5b041; font-weight: bold; font-size: 1.1em; display: block; margin-top: 5px;}
+        
+        /* Secciones */
+        .section-title { 
+            color: #ffffff; 
+            font-size: 1.1em; 
+            margin-top: 30px; 
+            margin-bottom: 5px;
+            border-left: 3px solid #f5b041; 
+            padding-left: 10px; 
+            font-weight: bold;
+        }
+        .subtitle { 
+            font-size: 0.85em; 
+            color: #888; 
+            margin-bottom: 15px; 
+            padding-left: 13px;
+        }
+        
+        /* Inputs y botón de copiar */
+        .field { margin-top: 15px; }
+        .field label { display: block; font-size: 0.75em; color: #888; text-transform: uppercase; margin-bottom: 8px; font-weight: bold; letter-spacing: 0.5px;}
+        
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-group input { 
+            width: 100%; 
+            background-color: #14181f; 
+            border: 1px solid #2d323c; 
+            color: #ffffff; 
+            padding: 12px 40px 12px 15px; 
+            border-radius: 8px; 
+            font-family: monospace; 
+            font-size: 0.95em;
+            box-sizing: border-box; 
+            cursor: pointer; 
+            transition: border 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .input-group input:hover { border-color: #f5b041; }
+        
+        .copy-icon {
+            position: absolute;
+            right: 12px;
+            cursor: pointer;
+            color: #f5b041;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .copy-icon:hover { opacity: 1; }
+        
+        /* Caja de alternativas */
+        .alt-box { 
+            background-color: #14181f; 
+            border: 1px solid #2d323c; 
+            border-radius: 8px; 
+            padding: 15px; 
+            margin-top: 20px; 
+        }
+        .alt-text { font-size: 0.9em; color: #cccccc; margin-top: 0; margin-bottom: 15px; line-height: 1.5;}
+        .alt-label { color: #f5b041; font-size: 0.75em; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 10px; letter-spacing: 0.5px;}
+        .alt-url { 
+            display: inline-block; 
+            color: #4a90e2; 
+            font-family: monospace; 
+            margin-bottom: 8px; 
+            cursor: pointer; 
+            background-color: rgba(74, 144, 226, 0.15); 
+            padding: 6px 10px; 
+            border-radius: 4px; 
+            font-size: 0.9em;
+        }
+        .alt-url:hover { background-color: rgba(74, 144, 226, 0.3); }
+        .alt-vpn { color: #888; font-size: 0.9em; margin-left: 5px; }
+
+        /* Footer WhatsApp */
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #2d323c;
+            text-align: left;
+            font-size: 0.9em;
+            color: #888;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .whatsapp-btn {
+            display: flex;
+            align-items: center;
+            color: #25D366;
+            text-decoration: none;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        .whatsapp-btn:hover { opacity: 0.8; }
+        .whatsapp-btn svg { margin-right: 8px; }
+
+        /* Mensaje de error */
         .error-container { text-align: center; padding: 40px 20px; }
         .error-logo { color: #f5b041; font-size: 1.4em; font-weight: 900; letter-spacing: 2px; margin-bottom: 30px; }
         .error-title { color: #ffffff; font-size: 2em; font-weight: bold; margin-bottom: 15px; }
@@ -28,13 +176,27 @@
     </style>
 </head>
 <body>
-    <div class="card" id="app">
-        <p style="text-align:center;">Cargando accesos...</p>
+
+    <div class="main-container">
+        <div class="page-header">
+            <h1 class="page-title">Mis accesos</h1>
+            <p class="page-subtitle">Toca un valor para copiarlo.</p>
+        </div>
+
+        <div class="card" id="app">
+            <p style="text-align:center;">Cargando accesos...</p>
+        </div>
     </div>
 
     <script>
-        // 🔥 PEGA AQUÍ TU CLAVE REAL (la que empieza por oh5...)
+        // 🔥 PEGA AQUÍ TU CLAVE REAL
         const CLAVE_SECRETA = 'oh5eQeGdwAXR1Ci2wisjM2FSO3cF0LpuqwufjPT0I4k=';
+        
+        // Tu número de WhatsApp
+        const NUMERO_WHATSAPP = "34607856956"; 
+
+        // SVG del icono de copiar
+        const ICONO_COPIAR = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
 
         // Función nativa para convertir de Base64Url a Bytes
         function base64UrlToBytes(base64Url) {
@@ -50,31 +212,26 @@
 
         async function descifrarFernet(token, claveStr) {
             try {
-                // 1. Decodificar el token y la clave de Base64Url
                 const tokenBytes = base64UrlToBytes(token);
                 const claveBytes = base64UrlToBytes(claveStr);
 
                 if (tokenBytes.length < 73) throw new Error("Token demasiado corto");
 
-                // 2. Extraer partes del token Fernet (Versión, Timestamp, IV, Ciphertext, HMAC)
                 const iv = tokenBytes.slice(9, 25);
                 const ciphertext = tokenBytes.slice(25, tokenBytes.length - 32);
                 const hmac = tokenBytes.slice(tokenBytes.length - 32);
                 
-                // 3. Separar la clave en Signing Key (primeros 16 bytes) y Encryption Key (últimos 16 bytes)
                 const signingKey = claveBytes.slice(0, 16);
                 const encryptionKey = claveBytes.slice(16, 32);
 
-                // 4. Verificar la firma HMAC (Seguridad)
                 const keyHmac = await crypto.subtle.importKey(
                     "raw", signingKey, { name: "HMAC", hash: "SHA-256" }, false, ["verify"]
                 );
                 const dataToVerify = tokenBytes.slice(0, tokenBytes.length - 32);
                 const isValid = await crypto.subtle.verify("HMAC", keyHmac, hmac, dataToVerify);
                 
-                if (!isValid) throw new Error("Firma inválida (la clave no coincide o el enlace fue alterado)");
+                if (!isValid) throw new Error("Firma inválida");
 
-                // 5. Descifrar los datos (AES-CBC)
                 const keyAes = await crypto.subtle.importKey(
                     "raw", encryptionKey, { name: "AES-CBC" }, false, ["decrypt"]
                 );
@@ -82,10 +239,8 @@
                     { name: "AES-CBC", iv: iv }, keyAes, ciphertext
                 );
 
-                // 6. Convertir a texto y luego a JSON
                 const decoder = new TextDecoder();
-                const jsonString = decoder.decode(decryptedBuffer);
-                return JSON.parse(jsonString);
+                return JSON.parse(decoder.decode(decryptedBuffer));
 
             } catch (e) {
                 console.error("Error de descifrado:", e);
@@ -101,13 +256,12 @@
                 return; 
             }
 
-            // Intentar descifrar usando la API nativa
             const datos = await descifrarFernet(hash, CLAVE_SECRETA);
 
             if (datos) {
                 renderPanel(datos);
             } else {
-                renderError("La clave secreta del HTML no coincide con la del script de Python, o el enlace está caducado.");
+                renderError("La clave secreta no coincide o el enlace está caducado.");
             }
         }
 
@@ -128,11 +282,14 @@
         function renderPanel(datos) {
             const app = document.getElementById('app');
             
+            // Generar HTML para las alternativas
             let htmlAlternativas = '';
             if (datos.servidor.alternativas && datos.servidor.alternativas.length > 0) {
-                let urlsHtml = datos.servidor.alternativas.map(url => 
-                    `<span class="alt-url" onclick="copiarTexto('${url}', this)">${url}</span>`
-                ).join('');
+                let urlsHtml = datos.servidor.alternativas.map((url, index) => {
+                    // Añadimos el texto " - si usas VPN" a la segunda URL para imitar tu diseño original
+                    let extraText = (index === 1) ? ' <span class="alt-vpn"> - si usas VPN</span>' : '';
+                    return `<div><span class="alt-url" onclick="copiarTextoDirecto('${url}', this)">${url}</span>${extraText}</div>`;
+                }).join('');
                 
                 htmlAlternativas = `
                     <div class="alt-box">
@@ -143,37 +300,104 @@
                 `;
             }
 
+            // Generar enlace de WhatsApp con los datos del cliente
+            const textoWhatsApp = `Hola, necesito ayuda con mi cuenta.\n\nServidor: ${datos.servidor.nombre}\nUsuario: ${datos.xtream.usuario}\nFecha de Caducidad: ${datos.expira}`;
+            const urlWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWhatsApp)}`;
+
+            // Icono de Whatsapp SVG
+            const iconoWa = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
             app.innerHTML = `
-                <div class="header">
-                    <div><span style="font-size: 0.8em; color: #888;">PLAN</span><br><span class="plan-name">${datos.plan}</span></div>
-                    <div style="text-align: right;"><span style="font-size: 0.8em; color: #888;">EXPIRA EL</span><br><span class="expira">${datos.expira}</span></div>
+                <div class="header-plan">
+                    <div><span>PLAN</span><span class="plan-name">${datos.servidor.nombre}</span></div>
+                    <div style="text-align: right;"><span>EXPIRA EL</span><span class="expira">${datos.expira}</span></div>
                 </div>
-                <div class="section-title">| ${datos.servidor.nombre}</div>
+
+                <div class="section-title">| Xtream Codes</div>
                 <div class="subtitle">Móvil, PC, box</div>
-                <div class="field"><label>HOST</label><input type="text" value="${datos.servidor.principal}" readonly onclick="copiarInput(this)"></div>
-                <div class="field"><label>USUARIO</label><input type="text" value="${datos.xtream.usuario}" readonly onclick="copiarInput(this)"></div>
-                <div class="field"><label>CONTRASEÑA</label><input type="text" value="${datos.xtream.contrasena}" readonly onclick="copiarInput(this)"></div>
+                
+                <div class="field">
+                    <label>HOST</label>
+                    <div class="input-group">
+                        <input type="text" value="${datos.servidor.principal}" readonly onclick="copiarInput(this)">
+                        <span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>USUARIO</label>
+                    <div class="input-group">
+                        <input type="text" value="${datos.xtream.usuario}" readonly onclick="copiarInput(this)">
+                        <span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>CONTRASEÑA</label>
+                    <div class="input-group">
+                        <input type="text" value="${datos.xtream.contrasena}" readonly onclick="copiarInput(this)">
+                        <span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span>
+                    </div>
+                </div>
+
                 ${htmlAlternativas}
+
                 <div class="section-title">| Smarters Pro</div>
                 <div class="subtitle">LG, Samsung, Android TV, Firestick</div>
-                <div class="field"><label>SERVIDOR</label><input type="text" value="${datos.servidor.principal}" readonly onclick="copiarInput(this)"></div>
-                <div class="field"><label>USUARIO</label><input type="text" value="${datos.smarters.usuario}" readonly onclick="copiarInput(this)"></div>
-                <div class="field"><label>CONTRASEÑA</label><input type="text" value="${datos.smarters.contrasena}" readonly onclick="copiarInput(this)"></div>
+                <div class="field">
+                    <label>SERVIDOR</label>
+                    <div class="input-group">
+                        <input type="text" value="${datos.servidor.principal}" readonly onclick="copiarInput(this)">
+                        <span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>USUARIO</label>
+                    <div class="input-group">
+                        <input type="text" value="${datos.smarters.usuario}" readonly onclick="copiarInput(this)">
+                        <span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>CONTRASEÑA</label>
+                    <div class="input-group">
+                        <input type="text" value="${datos.smarters.contrasena}" readonly onclick="copiarInput(this)">
+                        <span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span>
+                    </div>
+                </div>
+
                 <div class="section-title">| Enlace M3U</div>
                 <div class="subtitle">VLC, TiviMate, Smart TV</div>
-                <div class="field"><label>ENLACE M3U</label><input type="text" value="${datos.m3u}" readonly onclick="copiarInput(this)"></div>
+                <div class="field">
+                    <label>ENLACE M3U</label>
+                    <div class="input-group">
+                        <input type="text" value="${datos.m3u}" readonly onclick="copiarInput(this)">
+                        <span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span>
+                    </div>
+                </div>
+
+                <!-- FOOTER WHATSAPP -->
+                <div class="footer">
+                    <span>¿Una duda?</span>
+                    <a href="${urlWhatsApp}" target="_blank" class="whatsapp-btn">
+                        ${iconoWa} Contáctanos
+                    </a>
+                </div>
             `;
         }
 
+        // Función mejorada de copiado
         window.copiarInput = function(input) {
-            input.select();
-            document.execCommand('copy');
-            const colorOriginal = input.style.borderColor;
-            input.style.borderColor = '#f5b041';
-            setTimeout(() => input.style.borderColor = colorOriginal, 500);
+            navigator.clipboard.writeText(input.value).then(() => {
+                const colorOriginal = input.style.borderColor;
+                input.style.borderColor = '#f5b041';
+                setTimeout(() => input.style.borderColor = colorOriginal, 500);
+            }).catch(err => {
+                // Fallback para navegadores muy antiguos
+                input.select();
+                document.execCommand('copy');
+            });
         };
 
-        window.copiarTexto = function(texto, elemento) {
+        window.copiarTextoDirecto = function(texto, elemento) {
             navigator.clipboard.writeText(texto).then(() => {
                 const bgOriginal = elemento.style.backgroundColor;
                 elemento.style.backgroundColor = '#f5b041';
