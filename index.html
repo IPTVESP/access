@@ -292,14 +292,16 @@
         }
 
         async function init() {
-            const hash = window.location.hash.substring(1);
+            // 🔥 CAMBIO AQUÍ: Leemos el parámetro ?data= en lugar del hash #
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('data');
             
-            if (!hash) { 
+            if (!token) { 
                 renderError("No se ha encontrado ningún código en el enlace."); 
                 return; 
             }
 
-            const datos = await descifrarFernet(hash, CLAVE_SECRETA);
+            const datos = await descifrarFernet(token, CLAVE_SECRETA);
 
             if (datos) {
                 renderPanel(datos);
@@ -384,7 +386,6 @@
                 <div class="field">
                     <label>SERVIDOR</label>
                     <div class="input-group">
-                        <!-- Lógica: usa smarters_host si está definido, si no, usa principal -->
                         <input type="text" value="${datos.servidor.smarters_host || datos.servidor.principal}" readonly onclick="copiarInput(this)">
                         <span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span>
                     </div>
