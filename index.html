@@ -25,54 +25,60 @@
         .error-logo { color: #f5b041; font-size: 1.4em; font-weight: 900; letter-spacing: 2px; margin-bottom: 30px; }
         .error-title { color: #ffffff; font-size: 2em; font-weight: bold; margin-bottom: 15px; }
         .error-subtitle { color: #a0a0a0; font-size: 1em; line-height: 1.5; }
+        .debug { font-size: 0.8em; color: #ff5555; margin-top: 20px; font-family: monospace; display: none; }
     </style>
 </head>
 <body>
     <div class="card" id="app">
         <p style="text-align:center;">Cargando accesos...</p>
+        <div id="debug-info" class="debug"></div>
     </div>
 
     <script type="module">
-        // 🔥 CDN actualizado y con soporte para módulos ES
-        import { Fernet } from 'https://esm.sh/fernet-ts@1.0.2';
+        // Usamos jsdelivr, que es extremadamente estable para módulos
+        import { Fernet } from 'https://cdn.jsdelivr.net/npm/fernet-ts@1.0.2/dist/index.min.js';
 
-        // 🔥 TU CLAVE REAL (ya integrada)
-        const CLAVE_SECRETA = 'oh5eQeGdwAXR1Ci2wisjM2FSO3cF0LpuqwufjPT0I4k=';
-
-        // Sistema de seguridad: si en 10 segundos no carga, muestra error.
-        const timeoutId = setTimeout(() => {
-            console.error("Timeout: La librería no cargó a tiempo.");
-            renderError();
-        }, 10000);
+        // ⚠️ PEGA AQUÍ TU CLAVE REAL DE PYTHON
+        const CLAVE_SECRETA = 'oh5eQeGdwAXR1Ci2wisjM2FSO3cF0LpuqwufjPT0I4k='; 
 
         async function init() {
             const hash = window.location.hash.substring(1);
-            if (!hash) { renderError(); clearTimeout(timeoutId); return; }
+            const debugDiv = document.getElementById('debug-info');
+            
+            if (!hash) { 
+                mostrarError("No hay ningún código en la URL.");
+                return; 
+            }
 
             try {
+                // Intentamos descifrar
                 const jsonString = await Fernet.decrypt(hash, CLAVE_SECRETA);
                 const datos = JSON.parse(jsonString);
-                clearTimeout(timeoutId); // Cancelamos el timeout porque ya cargó
                 renderPanel(datos);
             } catch (e) {
-                console.error("Fallo de desencriptación:", e);
-                clearTimeout(timeoutId);
-                renderError();
+                console.error("Error de descifrado:", e);
+                // Mostramos el error en pantalla para saber qué pasa
+                debugDiv.style.display = 'block';
+                debugDiv.innerHTML = "<strong>Error técnico:</strong> " + e.message + "<br><br><em>Comprueba que la clave del HTML coincide con el archivo secret.key de Python.</em>";
+                mostrarError();
             }
         }
 
-        function renderError() {
+        function mostrarError(mensajeExtra = "") {
             const app = document.getElementById('app');
-            if (!app) return;
             app.style.backgroundColor = 'transparent';
             app.style.border = 'none';
+            const debugInfo = document.getElementById('debug-info');
+            
             app.innerHTML = `
                 <div class="error-container">
                     <div class="error-logo">STRONG 8K</div>
                     <div class="error-title">Enlace inválido o expirado</div>
                     <div class="error-subtitle">Verifique el enlace recibido por email, o escríbanos.</div>
+                    ${mensajeExtra ? `<p style="color:#ff5555; margin-top:20px; font-size:0.9em;">${mensajeExtra}</p>` : ''}
                 </div>
             `;
+            if (debugInfo) app.appendChild(debugInfo);
         }
 
         function renderPanel(datos) {
@@ -98,46 +104,20 @@
                     <div><span style="font-size: 0.8em; color: #888;">PLAN</span><br><span class="plan-name">${datos.plan}</span></div>
                     <div style="text-align: right;"><span style="font-size: 0.8em; color: #888;">EXPIRA EL</span><br><span class="expira">${datos.expira}</span></div>
                 </div>
-
                 <div class="section-title">| ${datos.servidor.nombre}</div>
                 <div class="subtitle">Móvil, PC, box</div>
-                
-                <div class="field">
-                    <label>HOST</label>
-                    <input type="text" value="${datos.servidor.principal}" readonly onclick="copiarInput(this)">
-                </div>
-                <div class="field">
-                    <label>USUARIO</label>
-                    <input type="text" value="${datos.xtream.usuario}" readonly onclick="copiarInput(this)">
-                </div>
-                <div class="field">
-                    <label>CONTRASEÑA</label>
-                    <input type="text" value="${datos.xtream.contrasena}" readonly onclick="copiarInput(this)">
-                </div>
-
+                <div class="field"><label>HOST</label><input type="text" value="${datos.servidor.principal}" readonly onclick="copiarInput(this)"></div>
+                <div class="field"><label>USUARIO</label><input type="text" value="${datos.xtream.usuario}" readonly onclick="copiarInput(this)"></div>
+                <div class="field"><label>CONTRASEÑA</label><input type="text" value="${datos.xtream.contrasena}" readonly onclick="copiarInput(this)"></div>
                 ${htmlAlternativas}
-
                 <div class="section-title">| Smarters Pro</div>
                 <div class="subtitle">LG, Samsung, Android TV, Firestick</div>
-                <div class="field">
-                    <label>SERVIDOR</label>
-                    <input type="text" value="${datos.servidor.principal}" readonly onclick="copiarInput(this)">
-                </div>
-                <div class="field">
-                    <label>USUARIO</label>
-                    <input type="text" value="${datos.smarters.usuario}" readonly onclick="copiarInput(this)">
-                </div>
-                <div class="field">
-                    <label>CONTRASEÑA</label>
-                    <input type="text" value="${datos.smarters.contrasena}" readonly onclick="copiarInput(this)">
-                </div>
-
+                <div class="field"><label>SERVIDOR</label><input type="text" value="${datos.servidor.principal}" readonly onclick="copiarInput(this)"></div>
+                <div class="field"><label>USUARIO</label><input type="text" value="${datos.smarters.usuario}" readonly onclick="copiarInput(this)"></div>
+                <div class="field"><label>CONTRASEÑA</label><input type="text" value="${datos.smarters.contrasena}" readonly onclick="copiarInput(this)"></div>
                 <div class="section-title">| Enlace M3U</div>
                 <div class="subtitle">VLC, TiviMate, Smart TV</div>
-                <div class="field">
-                    <label>ENLACE M3U</label>
-                    <input type="text" value="${datos.m3u}" readonly onclick="copiarInput(this)">
-                </div>
+                <div class="field"><label>ENLACE M3U</label><input type="text" value="${datos.m3u}" readonly onclick="copiarInput(this)"></div>
             `;
         }
 
