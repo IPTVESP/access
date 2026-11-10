@@ -171,6 +171,39 @@
             }
         }
 
+        // --- UTILIDADES DE FECHA ---
+
+        /**
+         * Convierte el string de expiración a un objeto Date LOCAL.
+         * Acepta:
+         *   "YYYY-MM-DD"           -> se interpreta como 23:59:59 hora local
+         *   "YYYY-MM-DD HH:MM:SS"  -> se interpreta tal cual, hora local
+         */
+        function parseExpira(expiraStr) {
+            if (!expiraStr) return null;
+            const s = String(expiraStr).trim();
+            if (s.length > 10) {
+                return new Date(s.replace(' ', 'T'));
+            }
+            return new Date(s + 'T23:59:59');
+        }
+
+        /**
+         * Formatea el string de expiración para mostrarlo de forma legible.
+         *   "YYYY-MM-DD 23:59:59" -> "YYYY-MM-DD"
+         *   "YYYY-MM-DD 00:00:00" -> "YYYY-MM-DD"
+         *   "YYYY-MM-DD HH:MM:SS" -> "YYYY-MM-DD HH:MM" (planes de 1h/1d)
+         */
+        function formatearFecha(expiraStr) {
+            if (!expiraStr) return expiraStr;
+            const s = String(expiraStr);
+            if (s.length <= 10) return s;
+            if (s.endsWith(' 23:59:59') || s.endsWith(' 00:00:00')) {
+                return s.substring(0, 10);
+            }
+            return s.substring(0, 16);
+        }
+
         async function init() {
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('data');
@@ -183,8 +216,9 @@
             const datos = await descifrarFernet(token, CLAVE_SECRETA);
 
             if (datos) {
-                const fechaHoyStr = new Date().toISOString().split('T')[0];
-                if (datos.expira < fechaHoyStr) {
+                const expiraDate = parseExpira(datos.expira);
+                const ahora = new Date();
+                if (expiraDate && expiraDate < ahora) {
                     renderExpirado(datos);
                 } else {
                     renderPanel(datos);
@@ -201,7 +235,6 @@
             app.style.backgroundColor = 'transparent';
             app.style.border = 'none';
             
-            // 🔥 MENSAJE CORTO Y LIMPIO PARA WHATSAPP
             const textoWA = `Hola, he intentado acceder a mi enlace de IPTV pero me dice que es inválido. Necesito información del servicio. Gracias.`;
             const urlWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWA)}`;
 
@@ -227,8 +260,8 @@
             app.style.backgroundColor = 'transparent';
             app.style.border = 'none';
             
-            // Este mensaje SÍ lleva los datos del cliente
-            const textoWA = `Hola, mi suscripción ha caducado y me gustaría renovarla.\n\nServidor: ${datos.servidor.nombre}\nUsuario: ${datos.xtream.usuario}\nFecha de Caducidad: ${datos.expira}`;
+            const fechaLegible = formatearFecha(datos.expira);
+            const textoWA = `Hola, mi suscripción ha caducado y me gustaría renovarla.\n\nServidor: ${datos.servidor.nombre}\nUsuario: ${datos.xtream.usuario}\nFecha de Caducidad: ${fechaLegible}`;
             const urlWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWA)}`;
 
             app.innerHTML = `
@@ -240,7 +273,7 @@
                     <div class="info-box">
                         <div class="info-row"><span class="info-label">Servidor:</span> <span class="info-value">${datos.servidor.nombre}</span></div>
                         <div class="info-row"><span class="info-label">Usuario:</span> <span class="info-value">${datos.xtream.usuario}</span></div>
-                        <div class="info-row"><span class="info-label">Caducó el:</span> <span class="info-value highlight">${datos.expira}</span></div>
+                        <div class="info-row"><span class="info-label">Caducó el:</span> <span class="info-value highlight">${fechaLegible}</span></div>
                     </div>
 
                     <div class="status-wa-container">
@@ -268,7 +301,8 @@
                 htmlAlternativas = `<div class="alt-box"><p class="alt-text">Tu operador bloquea la dirección habitual: esta sí funciona. Si viajas o usas VPN, usa una de las alternativas.</p><span class="alt-label">URLS ALTERNATIVAS</span>${urlsHtml}</div>`;
             }
 
-            const textoWhatsApp = `Hola, necesito ayuda con mi cuenta.\n\nServidor: ${datos.servidor.nombre}\nUsuario: ${datos.xtream.usuario}\nFecha de Caducidad: ${datos.expira}`;
+            const fechaLegible = formatearFecha(datos.expira);
+            const textoWhatsApp = `Hola, necesito ayuda con mi cuenta.\n\nServidor: ${datos.servidor.nombre}\nUsuario: ${datos.xtream.usuario}\nFecha de Caducidad: ${fechaLegible}`;
             const urlWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWhatsApp)}`;
 
             let puertoHtml = `<div class="field"><label>PUERTO (Solo si tu app lo pide)</label><div class="input-group"><input type="text" value="${datos.servidor.puerto || '80'}" readonly onclick="copiarInput(this)"><span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span></div></div>`;
@@ -276,7 +310,7 @@
             app.innerHTML = `
                 <div class="header-plan">
                     <div><span class="label-small">SERVIDOR</span><span class="plan-name">${datos.servidor.nombre}</span></div>
-                    <div style="text-align: right;"><span class="label-small">EXPIRA EL</span><span class="expira">${datos.expira}</span></div>
+                    <div style="text-align: right;"><span class="label-small">EXPIRA EL</span><span class="expira">${fechaLegible}</span></div>
                 </div>
                 <div class="section-title">| Xtream Codes</div>
                 <div class="subtitle">Móvil, PC, box</div>
