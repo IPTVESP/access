@@ -38,24 +38,16 @@
     </div>
 
     <script type="module">
-        // 🔥 CORREGIDO: Enlace a la librería actualizado y funcional
         import { Fernet } from 'https://cdn.jsdelivr.net/npm/fernet-ts@1.0.1/dist/index.min.js';
 
-        // ⚠️ IMPORTANTE: Pega aquí tu clave real (sin espacios ni comillas extra)
-        // Puedes obtenerla desde tu script de Python en la opción 4.
-        const CLAVE_SECRETA = 'AQUI_VA_TU_CLAVE_SECRETA_DE_PYTHON';
+        // 🔥 TU CLAVE REAL ESTÁ AQUÍ INTEGRADA
+        const CLAVE_SECRETA = 'oh5eQeGdwAXR1Ci2wisjM2FSO3cF0LpuqwufjPT0I4k=';
 
         async function init() {
             const hash = window.location.hash.substring(1);
             if (!hash) { renderError(); return; }
 
             try {
-                if (CLAVE_SECRETA === 'oh5eQeGdwAXR1Ci2wisjM2FSO3cF0LpuqwufjPT0I4k=') {
-                    console.error("⚠️ ERROR: No has puesto tu clave secreta en el index.html");
-                    renderError();
-                    return;
-                }
-
                 const jsonString = await Fernet.decrypt(hash, CLAVE_SECRETA);
                 const datos = JSON.parse(jsonString);
                 renderPanel(datos);
@@ -164,7 +156,6 @@
             });
         };
 
-        // Iniciar
         init();
     </script>
 </body>
