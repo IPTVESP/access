@@ -183,9 +183,7 @@
             const datos = await descifrarFernet(token, CLAVE_SECRETA);
 
             if (datos) {
-                // Comprobamos si la fecha de expiración es anterior a HOY
-                const fechaHoyStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-                
+                const fechaHoyStr = new Date().toISOString().split('T')[0];
                 if (datos.expira < fechaHoyStr) {
                     renderExpirado(datos);
                 } else {
@@ -196,14 +194,15 @@
             }
         }
 
-        // --- PANTALLA 1: ENLACE INVÁLIDO (No se puede desencriptar) ---
+        // --- PANTALLA 1: ENLACE INVÁLIDO ---
         function renderInvalido(mensajeDebug = "") {
             document.getElementById('header-principal').style.display = 'none';
             const app = document.getElementById('app');
             app.style.backgroundColor = 'transparent';
             app.style.border = 'none';
             
-            const textoWA = `Hola, he intentado acceder a mi enlace de IPTV pero me dice que es inválido. Necesito información.\n\nMi enlace es: ${window.location.href}`;
+            // 🔥 MENSAJE CORTO Y LIMPIO PARA WHATSAPP
+            const textoWA = `Hola, he intentado acceder a mi enlace de IPTV pero me dice que es inválido. Necesito información del servicio. Gracias.`;
             const urlWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWA)}`;
 
             app.innerHTML = `
@@ -221,13 +220,14 @@
             `;
         }
 
-        // --- PANTALLA 2: ENLACE CADUCADO (Se desencripta, pero la fecha pasó) ---
+        // --- PANTALLA 2: ENLACE CADUCADO ---
         function renderExpirado(datos) {
             document.getElementById('header-principal').style.display = 'none';
             const app = document.getElementById('app');
             app.style.backgroundColor = 'transparent';
             app.style.border = 'none';
             
+            // Este mensaje SÍ lleva los datos del cliente
             const textoWA = `Hola, mi suscripción ha caducado y me gustaría renovarla.\n\nServidor: ${datos.servidor.nombre}\nUsuario: ${datos.xtream.usuario}\nFecha de Caducidad: ${datos.expira}`;
             const urlWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWA)}`;
 
@@ -252,11 +252,11 @@
             `;
         }
 
-        // --- PANTALLA 3: DATOS VÁLIDOS (La cuenta está activa) ---
+        // --- PANTALLA 3: DATOS VÁLIDOS ---
         function renderPanel(datos) {
             document.getElementById('header-principal').style.display = 'block';
             const app = document.getElementById('app');
-            app.style.backgroundColor = '#1e222b'; // Restaurar color original
+            app.style.backgroundColor = '#1e222b';
             app.style.border = '1px solid #2d323c';
             
             let htmlAlternativas = '';
