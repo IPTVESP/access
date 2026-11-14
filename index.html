@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Protegido</title>
+    <title>Mis Accesos</title>
     <style>
-        /* Estilos generales */
         body { 
             background-color: #0f1115; 
             color: #e0e0e0; 
@@ -22,25 +21,20 @@
         
         .main-container { width: 100%; max-width: 600px; }
 
-        /* Títulos superiores */
         .page-header { margin-bottom: 25px; display: none; }
         .page-title { font-size: 2.2rem; font-weight: bold; color: #ffffff; margin: 0 0 5px 0; letter-spacing: -0.5px; }
         .page-subtitle { color: #a0a0a0; font-size: 1rem; margin: 0; }
 
-        /* Tarjeta principal */
         .card { background-color: #1e222b; border-radius: 12px; padding: 25px; width: 100%; border: 1px solid #2d323c; box-sizing: border-box; }
         
-        /* Cabecera del plan */
         .header-plan { display: flex; justify-content: space-between; margin-bottom: 25px; background-color: #171a21; padding: 18px 20px; border-radius: 8px; border: 1px solid #2d323c; }
         .header-plan .label-small { font-size: 0.8rem; color: #8892a0; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; display: block; }
         .plan-name { font-weight: bold; font-size: 1.15rem; color: #ffffff; display: block; margin-top: 4px; }
         .expira { color: #f5b041; font-weight: bold; font-size: 1.15rem; display: block; margin-top: 4px; }
         
-        /* Secciones */
         .section-title { color: #ffffff; font-size: 1.15rem; margin-top: 30px; margin-bottom: 5px; border-left: 3px solid #f5b041; padding-left: 10px; font-weight: bold; }
         .subtitle { font-size: 0.9rem; color: #8892a0; margin-bottom: 15px; padding-left: 13px; }
         
-        /* Inputs y botón de copiar */
         .field { margin-top: 15px; }
         .field label { display: block; font-size: 0.8rem; color: #8892a0; text-transform: uppercase; margin-bottom: 6px; font-weight: 600; letter-spacing: 0.5px; }
         
@@ -51,7 +45,6 @@
         .copy-icon { position: absolute; right: 12px; cursor: pointer; color: #f5b041; display: flex; align-items: center; justify-content: center; opacity: 0.7; transition: opacity 0.2s; }
         .copy-icon:hover { opacity: 1; }
         
-        /* Caja de alternativas */
         .alt-box { background-color: #171a21; border: 1px solid #2d323c; border-radius: 8px; padding: 15px; margin-top: 20px; }
         .alt-text { font-size: 0.95rem; color: #a0a0a0; margin-top: 0; margin-bottom: 15px; line-height: 1.5; }
         .alt-label { color: #f5b041; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 10px; letter-spacing: 0.5px; }
@@ -63,19 +56,18 @@
         .alt-copy-icon:hover { opacity: 1; }
         .alt-tag { color: #8892a0; font-size: 0.85rem; margin-left: 10px; font-style: italic; }
 
-        /* Footer WhatsApp */
-        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #2d323c; display: flex; align-items: center; justify-content: flex-start; gap: 15px; font-size: 1rem; color: #8892a0; }
+        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #2d323c; display: flex; align-items: center; justify-content: flex-start; gap: 15px; font-size: 1rem; color: #8892a0; flex-wrap: wrap; }
         .whatsapp-btn { display: flex; align-items: center; color: #25D366; text-decoration: none; font-weight: bold; transition: opacity 0.2s; font-size: 1rem; }
         .whatsapp-btn:hover { opacity: 0.8; }
         .whatsapp-btn svg { margin-right: 6px; }
+        .refresh-btn { margin-left: auto; background: transparent; border: 1px solid #2d323c; color: #f5b041; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+        .refresh-btn:hover { background: rgba(245, 176, 65, 0.1); border-color: #f5b041; }
 
-        /* --- ESTILOS PARA PANTALLAS DE ESTADO (Error, Expirado, Login) --- */
         .status-container { text-align: center; padding: 30px 20px; }
         .status-logo { color: #f5b041; font-size: 1.4em; font-weight: 900; letter-spacing: 2px; margin-bottom: 20px; }
         .status-title { color: #ffffff; font-size: 2em; font-weight: bold; margin-bottom: 15px; }
         .status-subtitle { color: #a0a0a0; font-size: 1em; line-height: 1.5; margin-bottom: 25px;}
         
-        /* Caja de información para expirados */
         .info-box { background-color: #12151b; border: 1px solid #2d323c; border-radius: 8px; padding: 15px; margin-bottom: 25px; text-align: left; }
         .info-row { margin-bottom: 8px; font-size: 0.95rem; }
         .info-row:last-child { margin-bottom: 0; }
@@ -83,17 +75,21 @@
         .info-value { color: #ffffff; font-family: monospace; font-size: 1rem; }
         .info-value.highlight { color: #ff5555; font-weight: bold; }
 
-        /* Botón de WhatsApp centrado para estados */
         .status-wa-container { display: flex; justify-content: center; margin-top: 20px; }
         .status-wa-btn { display: flex; align-items: center; background-color: rgba(37, 211, 102, 0.1); color: #25D366; text-decoration: none; font-weight: bold; padding: 12px 24px; border-radius: 8px; border: 1px solid rgba(37, 211, 102, 0.3); transition: all 0.2s; font-size: 1rem; }
         .status-wa-btn:hover { background-color: rgba(37, 211, 102, 0.2); }
         .status-wa-btn svg { margin-right: 8px; }
 
-        /* Estilos específicos para Login */
-        .login-input { width: 100%; max-width: 300px; background-color: #12151b; border: 1px solid #2d323c; color: #d1d5db; padding: 12px 15px; border-radius: 8px; font-family: monospace; font-size: 1.1rem; box-sizing: border-box; text-align: center; margin: 15px auto; display: block; }
-        .login-btn { background-color: #f5b041; color: #000; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
-        .login-btn:hover { background-color: #d19b37; }
-        .error-msg { color: #ff5555; font-size: 0.9rem; margin-top: 10px; display: none; }
+        /* Estilos del gate de acceso */
+        .auth-gate { text-align: center; padding: 20px 10px; }
+        .auth-gate-logo { color: #f5b041; font-size: 1.2em; font-weight: 900; letter-spacing: 2px; margin-bottom: 20px; }
+        .auth-gate-title { color: #ffffff; font-size: 1.6em; font-weight: bold; margin-bottom: 12px; }
+        .auth-gate-sub { color: #8892a0; font-size: 0.95em; margin-bottom: 25px; line-height: 1.5; }
+        .auth-gate-input { background: #12151b; border: 1px solid #2d323c; color: #f5b041; text-align: center; font-size: 1.6em; font-family: monospace; letter-spacing: 8px; padding: 15px; border-radius: 8px; width: 210px; text-transform: lowercase; outline: none; box-sizing: border-box; transition: border-color 0.2s; }
+        .auth-gate-input:focus { border-color: #f5b041; }
+        .auth-gate-error { color: #ff5555; margin-top: 12px; font-size: 0.9em; min-height: 20px; }
+        .auth-gate-btn { margin-top: 18px; background: #f5b041; color: #000; border: none; font-weight: bold; padding: 12px 40px; border-radius: 8px; font-size: 1em; cursor: pointer; transition: opacity 0.2s; }
+        .auth-gate-btn:hover { opacity: 0.85; }
     </style>
 </head>
 <body>
@@ -110,294 +106,9 @@
     </div>
 
     <script>
-        // 🔥 PEGA AQUÍ TU CLAVE REAL
         const CLAVE_SECRETA = 'oh5eQeGdwAXR1Ci2wisjM2FSO3cF0LpuqwufjPT0I4k=';
-        
-        // Tu número de WhatsApp
-        const NUMERO_WHATSAPP = "34607856956"; 
+        const NUMERO_WHATSAPP = "34607856956";
+        const SESSION_PREFIX = "iptvesp_auth_";
 
         const ICONO_COPIAR = `<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-        const ICONO_WA = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
-
-        let datosGlobales = null; // Guardamos los datos aquí tras descifrar
-
-        function base64UrlToBytes(base64Url) {
-            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            while (base64.length % 4) { base64 += '='; }
-            const binaryString = atob(base64);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            return bytes;
-        }
-
-        async function descifrarFernet(token, claveStr) {
-            try {
-                const tokenBytes = base64UrlToBytes(token);
-                const claveBytes = base64UrlToBytes(claveStr);
-                if (tokenBytes.length < 73) throw new Error("Token demasiado corto");
-
-                const iv = tokenBytes.slice(9, 25);
-                const ciphertext = tokenBytes.slice(25, tokenBytes.length - 32);
-                const hmac = tokenBytes.slice(tokenBytes.length - 32);
-                
-                const signingKey = claveBytes.slice(0, 16);
-                const encryptionKey = claveBytes.slice(16, 32);
-
-                const keyHmac = await crypto.subtle.importKey("raw", signingKey, { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
-                const dataToVerify = tokenBytes.slice(0, tokenBytes.length - 32);
-                const isValid = await crypto.subtle.verify("HMAC", keyHmac, hmac, dataToVerify);
-                if (!isValid) throw new Error("Firma inválida");
-
-                const keyAes = await crypto.subtle.importKey("raw", encryptionKey, { name: "AES-CBC" }, false, ["decrypt"]);
-                const decryptedBuffer = await crypto.subtle.decrypt({ name: "AES-CBC", iv: iv }, keyAes, ciphertext);
-
-                const decoder = new TextDecoder();
-                return JSON.parse(decoder.decode(decryptedBuffer));
-            } catch (e) {
-                console.error("Error de descifrado:", e);
-                return null;
-            }
-        }
-
-        function parseExpira(expiraStr) {
-            if (!expiraStr) return null;
-            const s = String(expiraStr).trim();
-            if (s.length > 10) {
-                return new Date(s.replace(' ', 'T'));
-            }
-            return new Date(s + 'T23:59:59');
-        }
-
-        function formatearFecha(expiraStr) {
-            if (!expiraStr) return expiraStr;
-            const s = String(expiraStr);
-            if (s.length <= 10) return s;
-            if (s.endsWith(' 23:59:59') || s.endsWith(' 00:00:00')) {
-                return s.substring(0, 10);
-            }
-            return s.substring(0, 16);
-        }
-
-        async function init() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('data');
-            
-            if (!token) { 
-                renderInvalido("No se ha encontrado ningún código en el enlace."); 
-                return; 
-            }
-
-            datosGlobales = await descifrarFernet(token, CLAVE_SECRETA);
-
-            if (datosGlobales) {
-                // Si hay contraseña, pedirla
-                if (datosGlobales.auth_phone && datosGlobales.auth_phone !== "") {
-                    renderLogin();
-                } else {
-                    // Si no hay contraseña, mostrar panel directamente
-                    verificarAcceso();
-                }
-            } else {
-                renderInvalido("La clave secreta no coincide o el enlace está mal copiado.");
-            }
-        }
-
-        function verificarAcceso() {
-            const expiraDate = parseExpira(datosGlobales.expira);
-            const ahora = new Date();
-            if (expiraDate && expiraDate < ahora) {
-                renderExpirado(datosGlobales);
-            } else {
-                renderPanel(datosGlobales);
-            }
-        }
-
-        // --- PANTALLA DE LOGIN ---
-        function renderLogin() {
-            document.getElementById('header-principal').style.display = 'none';
-            const app = document.getElementById('app');
-            app.style.backgroundColor = 'transparent';
-            app.style.border = 'none';
-            
-            app.innerHTML = `
-                <div class="status-container">
-                    <div class="status-logo">IPTVESP</div>
-                    <div class="status-title">Acceso Protegido</div>
-                    <div class="status-subtitle">Introduce tu número de teléfono para ver tus datos.</div>
-                    
-                    <input type="tel" id="login-input" class="login-input" placeholder="Ej: 600123456">
-                    <button class="login-btn" onclick="checkPassword()">Entrar</button>
-                    <p id="login-error" class="error-msg">Número incorrecto. Inténtalo de nuevo.</p>
-                </div>
-            `;
-            
-            // Permitir pulsar Enter
-            document.getElementById('login-input').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') checkPassword();
-            });
-            document.getElementById('login-input').focus();
-        }
-
-        window.checkPassword = function() {
-            const input = document.getElementById('login-input').value;
-            // Limpiar la entrada del usuario (quitar espacios, +, etc.)
-            let inputLimpio = input.replace(/\D/g, '');
-            if (inputLimpio.startsWith("34")) inputLimpio = inputLimpio.substring(2);
-            
-            if (inputLimpio === datosGlobales.auth_phone) {
-                // Contraseña correcta, renderizar panel
-                verificarAcceso();
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-                document.getElementById('login-input').value = "";
-            }
-        };
-
-        function renderInvalido(mensajeDebug = "") {
-            document.getElementById('header-principal').style.display = 'none';
-            const app = document.getElementById('app');
-            app.style.backgroundColor = 'transparent';
-            app.style.border = 'none';
-            
-            const textoWA = `Hola, he intentado acceder a mi enlace de IPTV pero me dice que es inválido. Necesito información del servicio. Gracias.`;
-            const urlWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWA)}`;
-
-            app.innerHTML = `
-                <div class="status-container">
-                    <div class="status-logo">IPTVESP</div>
-                    <div class="status-title">Enlace inválido</div>
-                    <div class="status-subtitle">Verifique el enlace recibido por email, o escríbanos.</div>
-                    ${mensajeDebug ? `<p style="color:#ff5555; margin-top:10px; font-size:0.85em; font-family:monospace;">${mensajeDebug}</p>` : ''}
-                    <div class="status-wa-container">
-                        <a href="${urlWhatsApp}" target="_blank" class="status-wa-btn">
-                            ${ICONO_WA} Solicitar información
-                        </a>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderExpirado(datos) {
-            document.getElementById('header-principal').style.display = 'none';
-            const app = document.getElementById('app');
-            app.style.backgroundColor = 'transparent';
-            app.style.border = 'none';
-            
-            const fechaLegible = formatearFecha(datos.expira);
-            const textoWA = `Hola, mi suscripción ha caducado y me gustaría renovarla.\n\nServidor: ${datos.servidor.nombre}\nUsuario: ${datos.xtream.usuario}\nFecha de Caducidad: ${fechaLegible}`;
-            const urlWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWA)}`;
-
-            app.innerHTML = `
-                <div class="status-container">
-                    <div class="status-logo">IPTVESP</div>
-                    <div class="status-title" style="color: #f5b041;">Suscripción Caducada</div>
-                    <div class="status-subtitle">Tu cuenta ha expirado. Contacta con nosotros para renovarla y seguir disfrutando del servicio.</div>
-                    
-                    <div class="info-box">
-                        <div class="info-row"><span class="info-label">Servidor:</span> <span class="info-value">${datos.servidor.nombre}</span></div>
-                        <div class="info-row"><span class="info-label">Usuario:</span> <span class="info-value">${datos.xtream.usuario}</span></div>
-                        <div class="info-row"><span class="info-label">Caducó el:</span> <span class="info-value highlight">${fechaLegible}</span></div>
-                    </div>
-
-                    <div class="status-wa-container">
-                        <a href="${urlWhatsApp}" target="_blank" class="status-wa-btn">
-                            ${ICONO_WA} Renovar suscripción
-                        </a>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderPanel(datos) {
-            document.getElementById('header-principal').style.display = 'block';
-            const app = document.getElementById('app');
-            app.style.backgroundColor = '#1e222b';
-            app.style.border = '1px solid #2d323c';
-            
-            let htmlAlternativas = '';
-            
-            let urlsHtml = '';
-            
-            if (datos.servidor.alternativas && datos.servidor.alternativas.length > 0) {
-                urlsHtml += datos.servidor.alternativas.map((url) => {
-                    return `<div class="alt-row"><span class="alt-url" onclick="copiarTextoDirecto('${url}', this)">${url}</span><span class="alt-copy-icon" onclick="copiarTextoDirecto('${url}', this)">${ICONO_COPIAR}</span></div>`;
-                }).join('');
-            }
-            
-            if (datos.servidor.vpn_alternativas && datos.servidor.vpn_alternativas.length > 0) {
-                urlsHtml += datos.servidor.vpn_alternativas.map((url) => {
-                    return `<div class="alt-row"><span class="alt-url" onclick="copiarTextoDirecto('${url}', this)">${url}</span><span class="alt-copy-icon" onclick="copiarTextoDirecto('${url}', this)">${ICONO_COPIAR}</span><span class="alt-tag">- Usar con VPN</span></div>`;
-                }).join('');
-            }
-
-            if (urlsHtml !== '') {
-                htmlAlternativas = `
-                <div class="alt-box">
-                    <p class="alt-text">Tu operador bloquea la dirección habitual: estas URLs sí funcionan.</p>
-                    <span class="alt-label">URLS ALTERNATIVAS</span>
-                    ${urlsHtml}
-                </div>`;
-            }
-
-            const fechaLegible = formatearFecha(datos.expira);
-            const textoWhatsApp = `Hola, necesito ayuda con mi cuenta.\n\nServidor: ${datos.servidor.nombre}\nUsuario: ${datos.xtream.usuario}\nFecha de Caducidad: ${fechaLegible}`;
-            const urlWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWhatsApp)}`;
-
-            let puertoHtml = `<div class="field"><label>PUERTO (Solo si tu app lo pide)</label><div class="input-group"><input type="text" value="${datos.servidor.puerto || '80'}" readonly onclick="copiarInput(this)"><span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span></div></div>`;
-
-            app.innerHTML = `
-                <div class="header-plan">
-                    <div><span class="label-small">SERVIDOR</span><span class="plan-name">${datos.servidor.nombre}</span></div>
-                    <div style="text-align: right;"><span class="label-small">EXPIRA EL</span><span class="expira">${fechaLegible}</span></div>
-                </div>
-                <div class="section-title">| Xtream Codes</div>
-                <div class="subtitle">Móvil, PC, box</div>
-                <div class="field"><label>HOST / URL / SERVIDOR</label><div class="input-group"><input type="text" value="${datos.servidor.principal}" readonly onclick="copiarInput(this)"><span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span></div></div>
-                <div class="field"><label>USUARIO</label><div class="input-group"><input type="text" value="${datos.xtream.usuario}" readonly onclick="copiarInput(this)"><span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span></div></div>
-                <div class="field"><label>CONTRASEÑA</label><div class="input-group"><input type="text" value="${datos.xtream.contrasena}" readonly onclick="copiarInput(this)"><span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span></div></div>
-                ${puertoHtml}
-                ${htmlAlternativas}
-                <div class="section-title">| Smarters Pro</div>
-                <div class="subtitle">LG, Samsung, Android TV, Firestick</div>
-                <div class="field"><label>HOST / URL / SERVIDOR</label><div class="input-group"><input type="text" value="${datos.servidor.smarters_host || datos.servidor.principal}" readonly onclick="copiarInput(this)"><span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span></div></div>
-                <div class="field"><label>USUARIO</label><div class="input-group"><input type="text" value="${datos.smarters.usuario}" readonly onclick="copiarInput(this)"><span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span></div></div>
-                <div class="field"><label>CONTRASEÑA</label><div class="input-group"><input type="text" value="${datos.smarters.contrasena}" readonly onclick="copiarInput(this)"><span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span></div></div>
-                <div class="section-title">| Enlace M3U</div>
-                <div class="subtitle">VLC, TiviMate, Smart TV</div>
-                <div class="field"><label>ENLACE M3U</label><div class="input-group"><input type="text" value="${datos.m3u}" readonly onclick="copiarInput(this)"><span class="copy-icon" onclick="copiarInput(this.parentElement.querySelector('input'))">${ICONO_COPIAR}</span></div></div>
-                <div class="footer">
-                    <span>¿Una duda?</span>
-                    <a href="${urlWhatsApp}" target="_blank" class="whatsapp-btn">${ICONO_WA} Contáctanos</a>
-                </div>
-            `;
-        }
-
-        window.copiarInput = function(input) {
-            navigator.clipboard.writeText(input.value).then(() => {
-                const colorOriginal = input.style.borderColor;
-                input.style.borderColor = '#f5b041';
-                setTimeout(() => input.style.borderColor = colorOriginal, 500);
-            }).catch(err => { input.select(); document.execCommand('copy'); });
-        };
-
-        window.copiarTextoDirecto = function(texto, elemento) {
-            navigator.clipboard.writeText(texto).then(() => {
-                if (elemento.classList.contains('alt-copy-icon')) {
-                    const colorOriginal = elemento.style.color;
-                    elemento.style.color = '#25D366'; 
-                    setTimeout(() => elemento.style.color = colorOriginal, 500);
-                } else {
-                    const bgOriginal = elemento.style.backgroundColor;
-                    elemento.style.backgroundColor = '#f5b041';
-                    elemento.style.color = '#000';
-                    setTimeout(() => { elemento.style.backgroundColor = bgOriginal; elemento.style.color = '#4a90e2'; }, 500);
-                }
-            });
-        };
-
-        init();
-    </script>
-</body>
-</html>
+        const ICONO_WA = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.
